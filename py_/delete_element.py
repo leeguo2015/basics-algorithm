@@ -21,29 +21,41 @@ class Solution:
 
     def removeDuplicates(self, nums: list) -> int:
 
-        # while True:
-        #     for i in nums:
-        #         if nums.index(i) == len(nums) - 1:
-        #             continue
-        #         if i == nums[nums.index(i) + 1]:
-        #             del nums[nums.index(i) + 1]
-        #             break
-        #     else:
-        #         return len(nums)
+        l = len(nums)
+        start = 0
+        for i in range(l):
+            left = l - i
+            for j in range(left):
+                if len(nums) <= i + 1:
+                    break
+                if nums[i] == nums[i + 1]:
+                    del nums[start]
+                else:
+                    start += 1
+                    break
+        else:
+            return len(nums)
 
-        for i in nums:
-            if nums.index(i) == len(nums) - 1:
-                continue
-            for j in nums[nums.index(i):]:
-                if i == j:
-                    del nums[nums.index(i) + 1]
 
+    def removeDuplicates_old(self, nums: list) -> int:
+
+        l = len(nums)
+        print(l)
+        for i in range(l):
+            left = l - i
+            for j in range(left):
+                if len(nums) <= i + 1:
+                    break
+                if nums[i] == nums[i + 1]:
+                    del nums[i + 1]
+                else:
+                    break
         else:
             return len(nums)
 
 
 if __name__ == "__main__":
     data = [1, 2, 2, 3]
-    # data = [1, 1, 1, 1]
+    # data = [1, 1, 1, 1, 3, 4, 4, 4]
     result = Solution().removeDuplicates(data)
     print(result, data)
