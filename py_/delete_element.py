@@ -24,8 +24,7 @@ class Solution:
         l = len(nums)
         start = 0
         for i in range(l):
-            left = l - i
-            for j in range(left):
+            for j in range(l - i):
                 if len(nums) <= i + 1:
                     break
                 if nums[i] == nums[i + 1]:
