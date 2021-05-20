@@ -26,12 +26,15 @@ class Solution:
 
         for i in nums:
             to_day = nums.index(i)
+            remain = nums.index(i)
             remain_day = nums[to_day:]
             profit = 0
+            new_profit = 0
 
             for j in remain_day:
-                if j - i and j-i > profit:
+                if j - i > profit:
                     profit = j - i
+                    remain = nums.index(j)
 
         return len(nums)
 
