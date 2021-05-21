@@ -9,12 +9,14 @@
 
 """
 
-def climb_stairs( step):
+
+def climb_stairs(step: int) -> int:
     if step == 1:
         return 1
     if step == 2:
         return 2
-    return climb_stairs(step-1) +climb_stairs(step-2)
+    return climb_stairs(step - 1) + climb_stairs(step - 2)
+
 
 if __name__ == "__main__":
     result = climb_stairs(4)
