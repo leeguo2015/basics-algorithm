@@ -1,4 +1,4 @@
-package main
+package delete_element
 
 import "fmt"
 
