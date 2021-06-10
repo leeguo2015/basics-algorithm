@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"go_fun/linkedList"
 )
+
 // 翻转单项链表
 
 func main() {
-	newlist :=new(linkedList.List)
+	newlist := new(linkedList.List)
 	fmt.Println(newlist)
 	fmt.Printf("%v\n", newlist.HeadNode)
 	//a := list.New()
@@ -17,7 +18,7 @@ func main() {
 	//a.PushFront(4)
 	//
 	//for e := a.Front(); e != nil; e = e.Next() {
-    //   fmt.Println(e.Value)
+	//   fmt.Println(e.Value)
 	//
 	//}
 }
