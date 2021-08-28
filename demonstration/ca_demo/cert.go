@@ -1,4 +1,4 @@
-package CA
+package keysignserver
 
 import (
 	"crypto"
@@ -16,29 +16,6 @@ import (
 	"os"
 	"time"
 )
-
-//ECDSASign 签名返回信息结构
-type ECDSASign struct {
-	R, S *big.Int
-}
-
-/*
-	name:DigestData
-	feature:生成明文的摘要数据,这里获取sha256的哈希值作为摘要数据
-	param:
-		data:明文数据
-	return:
-		err:错误信息
-		digestData:明文的摘要
-	author:ali 2020.9.24
-*/
-func DigestData(data []byte) []byte {
-	hash := sha256.New()
-	hash.Write(data)
-	bytes := hash.Sum(nil)
-	return bytes
-	//return sha256.Sum256(data)
-}
 
 func CreateCer() {
 	max := new(big.Int).Lsh(big.NewInt(1), 128)   //把 1 左移 128 位，返回给 big.Int
@@ -110,48 +87,49 @@ func GetDN(certBytes []byte) (string, error) {
 }
 
 //签名
-func RsaSignWithSha256(data []byte, keyBytes []byte) []byte {
+func RsaSignWithSha256(data []byte, keyBytes []byte) ([]byte, error) {
 	//h := sha1.New()
 	h := sha256.New()
 	h.Write(data)
 	hashed := h.Sum(nil)
 	block, _ := pem.Decode(keyBytes)
 	if block == nil {
-		panic(errors.New("private key error"))
+		return nil, errors.New("private key can not decode")
+		//panic(errors.New("private key error"))
 	}
 	privateKey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 	if err != nil {
 		fmt.Println("ParsePKCS8PrivateKey err", err)
-		panic(err)
+		return nil, errors.New("private key error")
+		//panic(err)
 	}
 
 	signature, err := rsa.SignPKCS1v15(rand.Reader, privateKey, crypto.SHA256, hashed)
 	if err != nil {
-		fmt.Printf("Error from signing: %s\n", err)
-		panic(err)
+		return nil, errors.New(fmt.Sprintf("Error from signing: %s\n", err))
 	}
 
-	return signature
+	return signature, nil
 }
 
 // 私钥解密
-func RsaDecrypt(ciphertext, keyBytes []byte) []byte {
+func RsaDecrypt(ciphertext, keyBytes []byte) ([]byte, error) {
 	//获取私钥
 	block, _ := pem.Decode(keyBytes)
 	if block == nil {
-		panic(errors.New("private key error!"))
+		return nil, errors.New("private key error")
 	}
 	//解析PKCS1格式的私钥
 	priv, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	// 解密
 	data, err := rsa.DecryptPKCS1v15(rand.Reader, priv, ciphertext)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	return data
+	return data, nil
 }
 
 //验证
@@ -174,25 +152,26 @@ func RsaVerySignWithSha256(data, signData, keyBytes []byte) bool {
 }
 
 // 公钥加密
-func RsaEncrypt(data, keyBytes []byte) []byte {
+func RsaEncrypt(data, keyBytes []byte) ([]byte, error) {
 	//解密pem格式的公钥
 	block, _ := pem.Decode(keyBytes)
 	if block == nil {
-		panic(errors.New("public key error"))
+		fmt.Println("public key error :")
+		return nil, errors.New("public key error")
 	}
 	// 解析公钥
 	pubInterface, err := x509.ParsePKIXPublicKey(block.Bytes)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	// 类型断言
 	pub := pubInterface.(*rsa.PublicKey)
 	//加密
 	ciphertext, err := rsa.EncryptPKCS1v15(rand.Reader, pub, data)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	return ciphertext
+	return ciphertext, nil
 }
 
 func SignData(data string, block *pem.Block) (signData string, err error) {
@@ -204,7 +183,6 @@ func SignData(data string, block *pem.Block) (signData string, err error) {
 		return signData, err
 	}
 	fmt.Println("privateKey :", privateKey)
-
 	msg := []byte(data)
 	// Before signing, we need to hash our message
 	// The hash is what we actually sign
@@ -217,7 +195,6 @@ func SignData(data string, block *pem.Block) (signData string, err error) {
 
 	//if ecPrivKey, ok := privateKey.(*rsa.PrivateKey); ok {	}//使用类型断言，否则会panic
 	//digestData := DigestData([]byte(data))
-
 	//result, err := ecdsa.SignASN1(rand.Reader, ecPrivKey, digestData)//SignASN1接口在golang1.15版本才引入的
 	//singDataBytes, err := rsa.SignPSS(rand.Reader, privateKey, digestData)
 	singDataBytes, err := rsa.SignPSS(rand.Reader, privateKey, crypto.SHA256, msgHashSum, nil)
@@ -230,22 +207,3 @@ func SignData(data string, block *pem.Block) (signData string, err error) {
 
 	return signData, err
 }
-
-//
-//func DecryptKey(encodeKey, priCertPath string) (key string, err error) {
-//	//1.解密密钥密文
-//	privateKey, err := GetPrivateKey(priCertPath)
-//	if err != nil {
-//		tlog.Error("读取私钥失败：%s", err)
-//		return key, err
-//	}
-//	//2.解密密文
-//	eciesPri := ecies.ImportECDSA(privateKey)
-//	decodeKey, _ := base64.StdEncoding.DecodeString(encodeKey)
-//	dt, err := eciesPri.Decrypt(rand.Reader, decodeKey, nil, nil)
-//	if err != nil {
-//		return key, err
-//	}
-//	key = string(dt)
-//	return key, err
-//}
