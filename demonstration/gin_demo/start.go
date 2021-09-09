@@ -1,11 +1,10 @@
 package gin_demo
 
 import "net/http"
-import "github.com/gin-gonic/gin"
 
 func StartServer() {
 
-	// 1.创建路由
+	//// 1.创建路由
 	r := gin.Default()
 	// 2.绑定路由规则，执行的函数
 	// gin.Context，封装了request和response
