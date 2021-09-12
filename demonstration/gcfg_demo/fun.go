@@ -2,7 +2,6 @@ package gcfg_demo
 
 import (
 	"fmt"
-	"gopkg.in/gcfg.v1"
 )
 
 func GetInfo() {
