@@ -2,6 +2,7 @@ package gcfg_demo
 
 import (
 	"fmt"
+	"gopkg.in/gcfg.v1"
 )
 
 func GetInfo() {
@@ -25,7 +26,6 @@ func GetInfo() {
 			Port string
 		}
 	}{}
-
 	err := gcfg.ReadFileInto(&config, "./key_conf.ini")
 
 	if err != nil {
