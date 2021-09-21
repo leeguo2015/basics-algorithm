@@ -1,17 +1,25 @@
 package web
 
-import "net/http"
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"go-integrated/demonstration/gin_demo/app/web/url"
+	"net/http"
+)
 
 func StartServer()  {
-	// 1.创建路由
 	r := gin.Default()
-	// 2.绑定路由规则，执行的函数
-	// gin.Context，封装了request和response
 	r.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "hello World!")
+		c.JSON(http.StatusOK, gin.H{
+			"message": "",
+			"data": 123,
+		})
 	})
-	// 3.监听端口，默认在8080
-	// Run("里面不指定端口号默认为8080")
-	r.Run(":8000")
+	//404 Handler.
+	r.NoRoute(func(c *gin.Context) {
+		c.String(http.StatusNotFound,"the incorrect API route.")
+	})
+
+	ApiHandler := r.Group("/api")
+	url.ApiInclude(ApiHandler)
+	_ = r.Run(":8000")
 }
