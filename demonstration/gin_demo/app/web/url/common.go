@@ -2,7 +2,7 @@ package url
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-integrated/demonstration/gin_demo/app/web/handler/user"
+	"workNote/gin_demo/app/web/handler/user"
 )
 
 func ApiInclude(c *gin.RouterGroup,)  {

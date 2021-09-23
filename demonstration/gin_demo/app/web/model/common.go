@@ -10,9 +10,9 @@ import (
 // Model 定义
 type Model struct {
 	ID        uint `gorm:"primary_key"`
-	CreatedTime time.Time
-	UpdatedTime time.Time
-	DeletedTime *time.Time
+	CreatedTime time.Time `json:"created_time"`
+	UpdatedTime time.Time `json:"updated_time"`
+	DeletedTime *time.Time `json:"deleted_time"`
 }
 
 // 初始化
@@ -25,7 +25,7 @@ func init() {
 		panic("数据库连接失败")
 	}
 
-	err = db.AutoMigrate(&todoModel{})
+	err = db.AutoMigrate(&user{})
 	if err != nil {
 		panic(fmt.Sprintf("DB auto migrate err: %s", err))
 	}
