@@ -2,13 +2,20 @@ package user
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
+	"go-integrated/demonstration/gin_demo/app/web/model"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func Get(c *gin.Context) {
 	fmt.Println(c.Param("userId"))
-	c.String(http.StatusOK, "User!")
+	selectUser := model.User{}
+	c.JSON(http.StatusOK, gin.H{
+		"status":  400,
+		"message": "",
+		"data":    selectUser,
+	})
 }
 
 func Post(c *gin.Context) {
