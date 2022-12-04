@@ -15,3 +15,13 @@ func TestCreateSLParams(t *testing.T) {
 	})
 
 }
+func TestZigzagConversionPolling(t *testing.T) {
+
+	Convey("ZigzagConversion", t, func() {
+
+		So(ZigzagConversionPolling("PAYPALISHIRING", 3), ShouldEqual, "PAHNAPLSIIGYIR")
+		//So(ZigzagConversionPolling("PAYPALISHIRING", 4), ShouldEqual, "PINALSIGYAHRPI")
+		//So(ZigzagConversionPolling("PAYPALISHIRING", 1), ShouldEqual, "PAYPALISHIRING")
+	})
+
+}
