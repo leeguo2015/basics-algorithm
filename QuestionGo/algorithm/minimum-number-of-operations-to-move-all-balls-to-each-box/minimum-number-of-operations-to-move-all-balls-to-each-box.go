@@ -30,25 +30,3 @@ func MinOperations(boxes string) []int {
 	}
 	return returnData
 }
-
-//func MinOperations(boxes string) []int {
-//	returnData := make([]int, 0)
-//	for k := 0; k < len(boxes); k++ {
-//		StepSum := 0
-//		for index, val := range boxes {
-//			Step := 0
-//			if index == k || val == '0' {
-//				continue
-//			}
-//			if k < index {
-//				Step = index - k
-//			} else {
-//				Step = k - index
-//			}
-//			StepSum += Step
-//		}
-//		returnData = append(returnData, StepSum)
-//	}
-//	return returnData
-//
-//}
