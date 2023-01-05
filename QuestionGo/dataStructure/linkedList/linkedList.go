@@ -11,9 +11,9 @@ type List struct {
 	HeadNode *Node //头节点
 }
 
-func (list *List) Length() int {
+func (l *List) Length() int {
 	//获取链表头结点
-	cur := list.HeadNode
+	cur := l.HeadNode
 	//定义一个计数器，初始值为0
 	count := 0
 
@@ -33,9 +33,9 @@ func (l *List) Add(data Object) *Node {
 	return node
 }
 
-func (this *List) len() int {
+func (l *List) len() int {
 	//获取链表头结点
-	cur := this.HeadNode
+	cur := l.HeadNode
 	//定义一个计数器，初始值为0
 	count := 0
 
