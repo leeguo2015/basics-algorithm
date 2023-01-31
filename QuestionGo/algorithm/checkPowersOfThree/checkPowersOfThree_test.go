@@ -14,7 +14,6 @@ var TestList = []Detail{
 }
 
 func Test_numDifferentIntegers(t *testing.T) {
-
 	for _, detail := range TestList {
 		if got := checkPowersOfThree(detail.mater); detail.want != got {
 			t.Errorf("test failed want:%#v, got %#v, mater: %#v", detail.want, got, detail.mater)
